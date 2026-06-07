@@ -18,28 +18,28 @@
       margin-top: 10px;
     }
 
-    #score {
-      font-size: 2.5em;
-      margin: 20px 0;
-      font-weight: bold;
-    }
-
     #status {
       font-size: 1.5em;
       height: 40px;
       margin-bottom: 10px;
     }
 
-    .burst {
-      color: red;
+    #score {
+      font-size: 3em;
       font-weight: bold;
+      margin: 20px 0;
+      transition: color 0.2s ease;
+    }
+
+    .burst {
+      color: red !important;
     }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      max-width: 400px;
+      max-width: 420px;
       margin: 0 auto;
     }
 
@@ -47,15 +47,15 @@
       font-size: 1.3em;
       padding: 15px;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       background: white;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       cursor: pointer;
       touch-action: manipulation;
     }
 
     button:active {
-      transform: scale(0.97);
+      transform: scale(0.96);
     }
 
     .wide {
@@ -76,9 +76,11 @@
   <button onclick="add(1)">1</button>
   <button onclick="add(2)">2</button>
   <button onclick="add(3)">3</button>
+
   <button onclick="add(5)">5</button>
   <button onclick="add(6)">6</button>
   <button onclick="add(7)">7</button>
+
   <button onclick="add(8)">8</button>
   <button onclick="add(10)">10</button>
   <button onclick="add(11)">11</button>
@@ -93,14 +95,28 @@
   let total = 0;
   let burst = false;
 
+  function getColor(value) {
+    // 0 → 緑（120deg）、99 → 赤（0deg）
+    let hue = 120 - (value / 99) * 120;
+
+    if (hue < 0) hue = 0;
+    if (hue > 120) hue = 120;
+
+    return `hsl(${hue}, 80%, 45%)`;
+  }
+
   function update() {
-    document.getElementById("score").textContent = total;
+    const score = document.getElementById("score");
     const status = document.getElementById("status");
 
+    score.textContent = total;
+
     if (burst) {
+      score.style.color = "red";
       status.textContent = "BURST!";
       status.classList.add("burst");
     } else {
+      score.style.color = getColor(total);
       status.textContent = "";
       status.classList.remove("burst");
     }
